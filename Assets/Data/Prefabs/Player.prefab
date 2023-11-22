@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: -8667696812556141818}
   - component: {fileID: 5971347486962449627}
   - component: {fileID: 5394299124720094208}
-  - component: {fileID: -2494457423108895877}
+  - component: {fileID: 7063409400448698080}
   - component: {fileID: 4200192053614221735}
   - component: {fileID: -7415786247278587776}
   - component: {fileID: 8099852779352030994}
@@ -484,8 +484,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c512a74c033149b43bbc0c58ac11a556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDead:
+    m_InternalValue: 0
   characterController: {fileID: 0}
   characterNetworkManager: {fileID: 0}
+  characterAnimatorManager: {fileID: 0}
+  characterEffectsManager: {fileID: 0}
   animator: {fileID: 0}
   isGrounded: 1
   isJumping: 0
@@ -493,6 +497,7 @@ MonoBehaviour:
   applyRootMotion: 0
   canRotate: 1
   canMove: 1
+  respawnCharacter: 0
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   playerNetworkManager: {fileID: 0}
@@ -582,7 +587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectToTest: {fileID: 11400000, guid: d96619981e5ca0740a71b29f5c554846, type: 2}
   processEffect: 0
---- !u!114 &-2494457423108895877
+--- !u!114 &7063409400448698080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -603,7 +608,13 @@ MonoBehaviour:
   isSprinting:
     m_InternalValue: 0
   endurance:
-    m_InternalValue: 1
+    m_InternalValue: 10
+  vitality:
+    m_InternalValue: 10
+  currentHealth:
+    m_InternalValue: 0
+  maxHealth:
+    m_InternalValue: 0
   currentStamina:
     m_InternalValue: 0
   maxStamina:

@@ -7,8 +7,13 @@ namespace CHARACTER
 {
     public class CharacterManager : NetworkBehaviour
     {
+        [Header("Status")]
+        public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
         [HideInInspector] public CharacterController characterController;
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
+        [HideInInspector] public CharacterAnimatorManager characterAnimatorManager;
+        [HideInInspector] public CharacterEffectsManager characterEffectsManager;
         [HideInInspector] public Animator animator;
 
         [Header("Flags")]
@@ -25,6 +30,8 @@ namespace CHARACTER
 
             characterController = GetComponent<CharacterController>();
             characterNetworkManager = GetComponent<CharacterNetworkManager>();
+            characterAnimatorManager = GetComponent<CharacterAnimatorManager>();
+            characterEffectsManager = GetComponent<CharacterEffectsManager>();
             animator = GetComponent<Animator>();
         }
 
@@ -38,6 +45,24 @@ namespace CHARACTER
             
         }
 
-        
+        public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+        {
+            if (IsOwner)
+            {
+                characterNetworkManager.currentHealth.Value = 0;
+                isDead.Value = true;
+
+                if (!manuallySelectDeathAnimation)
+                {
+                    characterAnimatorManager.PlayTargetActionAnimation("Death", true);
+                }
+            }
+            yield return new WaitForSeconds(5f);
+        }
+
+        public virtual void ReviveCharacter()
+        {
+
+        }
     }
 }

@@ -123,7 +123,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -133,7 +133,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_02;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -143,7 +143,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_03;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -153,7 +153,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -163,7 +163,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -173,7 +173,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -193,7 +193,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -203,7 +203,7 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -213,13 +213,19 @@ namespace MANAGERS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_10;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
 
             TitleScreenManager.instance.DisplayNoFreeCharacterSlotsPopUp();
 
+        }
+
+        private void NewGame()
+        {
+            SaveGame();
+            StartCoroutine(LoadWorldScene());
         }
 
         public void LoadGame()

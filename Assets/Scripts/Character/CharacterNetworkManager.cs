@@ -7,14 +7,6 @@ namespace CHARACTER
     public class CharacterNetworkManager : NetworkBehaviour
     {
         CharacterManager characterManager;
-        
-        /*[Header("Network Position")]
-        public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>(Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public Vector3 networkPositionVelocity;
-        public float networkPositionSmoothTime = 0.1f;
-        public float networkRotationSmoothTime = 0.1f;*/
-        
 
         [Header("Animator")]
         public NetworkVariable<float> animatorHorizontalParameter = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -26,12 +18,34 @@ namespace CHARACTER
 
         [Header("Stats")]
         public NetworkVariable<int> endurance = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> vitality = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
+        [Header("Resources")]
+        public NetworkVariable<float> currentHealth = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> maxHealth = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<float> currentStamina = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> maxStamina = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
 
         protected virtual void Awake()
         {
             characterManager = GetComponent<CharacterManager>();
+        }
+
+        public void CheckHP(float oldValue, float newValue)
+        {
+            if (currentHealth.Value <= 0)
+            {
+                StartCoroutine(characterManager.ProcessDeathEvent());
+            }
+
+            if (characterManager.IsOwner)
+            {
+                if(currentHealth.Value > maxHealth.Value)
+                {
+                    currentHealth.Value = maxHealth.Value;
+                }
+            }
         }
 
         [ServerRpc]
