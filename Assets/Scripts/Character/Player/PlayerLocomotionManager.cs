@@ -103,7 +103,7 @@ namespace PLAYER
 
         private void HandleJumpingMovement()
         {
-            if (playerManager.isJumping)
+            if (playerManager.playerNetworkManager.isJumping.Value)
             {
                 playerManager.characterController.Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
             }
@@ -200,12 +200,12 @@ namespace PLAYER
         {
             if (playerManager.isPerformingAction) return;
             if (playerManager.playerNetworkManager.currentStamina.Value <= 0) return;
-            if (playerManager.isJumping) return;
+            if (playerManager.playerNetworkManager.isJumping.Value) return;
             if (!playerManager.isGrounded) return;
 
             playerManager.playerAnimatorManager.PlayTargetActionAnimation("Jumping_Up", false);
 
-            playerManager.isJumping = true;
+            playerManager.playerNetworkManager.isJumping.Value = true;
 
             playerManager.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
 

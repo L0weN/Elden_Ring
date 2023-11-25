@@ -38,7 +38,7 @@ namespace CHARACTER
             }
             else
             {
-                if (!characterManager.isJumping && !fallingVelocityHasBeenSet)
+                if (!characterManager.characterNetworkManager.isJumping.Value && !fallingVelocityHasBeenSet)
                 {
                     fallingVelocityHasBeenSet = true;
                     yVelocity.y = fallStartYVelocity;

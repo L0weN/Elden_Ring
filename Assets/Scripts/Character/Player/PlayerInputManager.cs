@@ -43,8 +43,15 @@ namespace PLAYER
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
+
             SceneManager.activeSceneChanged += OnSceneChanged;
+
             instance.enabled = false;
+
+            if (playerControls != null)
+            {
+                playerControls.Disable();
+            }
         }
 
         private void OnSceneChanged(Scene oldScene, Scene newScene)
@@ -52,10 +59,18 @@ namespace PLAYER
             if (newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
             {
                 instance.enabled = true;
+                if (playerControls != null)
+                {
+                    playerControls.Enable();
+                }
             }
             else
             {
                 instance.enabled = false;
+                if (playerControls != null)
+                {
+                    playerControls.Disable();
+                }
             }
         }
 

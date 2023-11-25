@@ -18,7 +18,6 @@ namespace CHARACTER
 
         [Header("Flags")]
         public bool isGrounded = true;
-        public bool isJumping = false;
         public bool isPerformingAction = false;
         public bool applyRootMotion = false;
         public bool canRotate = true;
@@ -33,6 +32,11 @@ namespace CHARACTER
             characterAnimatorManager = GetComponent<CharacterAnimatorManager>();
             characterEffectsManager = GetComponent<CharacterEffectsManager>();
             animator = GetComponent<Animator>();
+        }
+
+        protected virtual void Start()
+        {
+            IgnoreMyOwnColliders();
         }
 
         protected virtual void Update()
@@ -63,6 +67,36 @@ namespace CHARACTER
         public virtual void ReviveCharacter()
         {
 
+        }
+
+        protected virtual void IgnoreMyOwnColliders()
+        {
+            // Character Controller Collider
+            Collider characterControllerCollider = GetComponent<Collider>();
+
+            // Damageable Character Layer Colliders
+            Collider[] damageableCharacterColliders = GetComponentsInChildren<Collider>();
+
+            // List of colliders to ignore
+            List<Collider> ignoreColliders = new List<Collider>();
+
+            // Add all of our damageable colliders to the ignore list
+            foreach (var collider in damageableCharacterColliders)
+            {
+                ignoreColliders.Add(collider);
+            }
+
+            // Add our character controller collider to the ignore list
+            ignoreColliders.Add(characterControllerCollider);
+
+            // Ignore all of the colliders in the ignore list
+            foreach (var collider in ignoreColliders)
+            {
+                foreach (var otherCollider in ignoreColliders)
+                {
+                    Physics.IgnoreCollision(collider, otherCollider, true);
+                }
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace CHARACTER
         }
 
         public virtual void PlayTargetActionAnimation(string targetActionAnimation, 
-           bool isPerformingAction, 
+           bool isPerformingAction,
            bool applyRootMotion = true, 
            bool canRotate = false, 
            bool canMove = false)
