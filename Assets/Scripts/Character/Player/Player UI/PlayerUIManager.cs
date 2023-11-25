@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace PLAYER
-{
     public class PlayerUIManager : MonoBehaviour
     {
         public static PlayerUIManager instance;
@@ -44,5 +42,4 @@ namespace PLAYER
             }
         }
     }
-}
 

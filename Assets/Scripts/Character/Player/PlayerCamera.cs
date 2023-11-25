@@ -2,10 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-namespace PLAYER
-{
-    public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoBehaviour
     {
         public static PlayerCamera instance;
 
@@ -103,6 +100,5 @@ namespace PLAYER
 
             cameraObjectPosition.z = Mathf.Lerp(cameraObject.transform.localPosition.z, targetCameraZPosition, .2f);
             cameraObject.transform.localPosition = cameraObjectPosition;
-        }
     }
 }

@@ -4,8 +4,6 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UI;
 
-namespace MANAGERS
-{
     public class TitleScreenManager : MonoBehaviour
     {
         public static TitleScreenManager instance;
@@ -108,4 +106,3 @@ namespace MANAGERS
             loadMenuReturnButton.Select();
         }
     }
-}

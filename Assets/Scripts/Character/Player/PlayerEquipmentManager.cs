@@ -1,11 +1,10 @@
-using PLAYER;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerEquipmentManager : CharacterEquipmentManager
 {
-    PlayerManager playerManager;
+    PlayerManager player;
 
     public WeaponModelInstantionSlot rightHandSlot;
     public WeaponModelInstantionSlot leftHandSlot;
@@ -20,7 +19,7 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     {
         base.Awake();
 
-        playerManager = GetComponent<PlayerManager>();
+        player = GetComponent<PlayerManager>();
 
         InitializeWeaponSlots();
     }
@@ -57,31 +56,31 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
 
     public void SwitchRightWeapon()
     {
-        if (!playerManager.IsOwner) return;
+        if (!player.IsOwner) return;
 
-        playerManager.playerAnimatorManager.PlayTargetActionAnimation("Swap_Right_Weapon", false, true, true, true);
+        player.playerAnimatorManager.PlayTargetActionAnimation("Swap_Right_Weapon", false, true, true, true);
 
         WeaponItem selectedWeapon = null;
 
-        playerManager.playerInventoryManager.rightHandWeaponIndex += 1;
+        player.playerInventoryManager.rightHandWeaponIndex += 1;
 
-        if(playerManager.playerInventoryManager.rightHandWeaponIndex < 0 || playerManager.playerInventoryManager.rightHandWeaponIndex > 2)
+        if(player.playerInventoryManager.rightHandWeaponIndex < 0 || player.playerInventoryManager.rightHandWeaponIndex > 2)
         {
-            playerManager.playerInventoryManager.rightHandWeaponIndex = 0;
+            player.playerInventoryManager.rightHandWeaponIndex = 0;
 
             float weaponCount = 0;
             WeaponItem firstWeapon = null;
             int firstWeaponPosition = 0;
 
-            for (int i = 0; i < playerManager.playerInventoryManager.weaponsInRightHandSlots.Length; i++)
+            for (int i = 0; i < player.playerInventoryManager.weaponsInRightHandSlots.Length; i++)
             {
-                if (playerManager.playerInventoryManager.weaponsInRightHandSlots[i].itemID != WorldItemDatabase.instance.unarmedWeapon.itemID)
+                if (player.playerInventoryManager.weaponsInRightHandSlots[i].itemID != WorldItemDatabase.instance.unarmedWeapon.itemID)
                 {
                     weaponCount += 1;
 
                     if (firstWeapon == null)
                     {
-                        firstWeapon = playerManager.playerInventoryManager.weaponsInRightHandSlots[i];
+                        firstWeapon = player.playerInventoryManager.weaponsInRightHandSlots[i];
                         firstWeaponPosition = i;
                     }
                 }
@@ -89,31 +88,31 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
 
             if (weaponCount <= 1)
             {
-                playerManager.playerInventoryManager.rightHandWeaponIndex = -1;
+                player.playerInventoryManager.rightHandWeaponIndex = -1;
                 selectedWeapon = WorldItemDatabase.instance.unarmedWeapon;
-                playerManager.playerNetworkManager.currentRightHandWeaponID.Value = selectedWeapon.itemID;
+                player.playerNetworkManager.currentRightHandWeaponID.Value = selectedWeapon.itemID;
             }
             else
             {
-                playerManager.playerInventoryManager.rightHandWeaponIndex = firstWeaponPosition;
-                playerManager.playerNetworkManager.currentRightHandWeaponID.Value = firstWeapon.itemID;
+                player.playerInventoryManager.rightHandWeaponIndex = firstWeaponPosition;
+                player.playerNetworkManager.currentRightHandWeaponID.Value = firstWeapon.itemID;
             }
 
             return;
         }
 
-        foreach(WeaponItem weapon in playerManager.playerInventoryManager.weaponsInRightHandSlots)
+        foreach(WeaponItem weapon in player.playerInventoryManager.weaponsInRightHandSlots)
         {
-            if (playerManager.playerInventoryManager.weaponsInRightHandSlots[playerManager.playerInventoryManager.rightHandWeaponIndex].itemID != WorldItemDatabase.instance.unarmedWeapon.itemID)
+            if (player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex].itemID != WorldItemDatabase.instance.unarmedWeapon.itemID)
             {
-                selectedWeapon = playerManager.playerInventoryManager.weaponsInRightHandSlots[playerManager.playerInventoryManager.rightHandWeaponIndex];
+                selectedWeapon = player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex];
 
-                playerManager.playerNetworkManager.currentRightHandWeaponID.Value = playerManager.playerInventoryManager.weaponsInRightHandSlots[playerManager.playerInventoryManager.rightHandWeaponIndex].itemID;
+                player.playerNetworkManager.currentRightHandWeaponID.Value = player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex].itemID;
                 return;
             }
         }
 
-        if (selectedWeapon == null && playerManager.playerInventoryManager.rightHandWeaponIndex <= 2)
+        if (selectedWeapon == null && player.playerInventoryManager.rightHandWeaponIndex <= 2)
         {
             SwitchRightWeapon();
         }
@@ -124,13 +123,13 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     }
     public void LoadRightWeapon()
     {
-        if (playerManager.playerInventoryManager.currentRightHandWeapon != null)
+        if (player.playerInventoryManager.currentRightHandWeapon != null)
         {
             rightHandSlot.UnloadWeapon();
-            rightHandWeaponModel = Instantiate(playerManager.playerInventoryManager.currentRightHandWeapon.weaponModel);
+            rightHandWeaponModel = Instantiate(player.playerInventoryManager.currentRightHandWeapon.weaponModel);
             rightHandSlot.LoadWeapon(rightHandWeaponModel);
             rightWeaponManager = rightHandWeaponModel.GetComponent<WeaponManager>();
-            rightWeaponManager.SetWeaponDamage(playerManager, playerManager.playerInventoryManager.currentRightHandWeapon);
+            rightWeaponManager.SetWeaponDamage(player, player.playerInventoryManager.currentRightHandWeapon);
         }
     }
 
@@ -142,12 +141,12 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     public void LoadLeftWeapon()
     {
         leftHandSlot.UnloadWeapon();
-        if (playerManager.playerInventoryManager.currentLeftHandWeapon != null)
+        if (player.playerInventoryManager.currentLeftHandWeapon != null)
         {
-            leftHandWeaponModel = Instantiate(playerManager.playerInventoryManager.currentLeftHandWeapon.weaponModel);
+            leftHandWeaponModel = Instantiate(player.playerInventoryManager.currentLeftHandWeapon.weaponModel);
             leftHandSlot.LoadWeapon(leftHandWeaponModel);
             leftWeaponManager = leftHandWeaponModel.GetComponent<WeaponManager>();
-            leftWeaponManager.SetWeaponDamage(playerManager, playerManager.playerInventoryManager.currentLeftHandWeapon);
+            leftWeaponManager.SetWeaponDamage(player, player.playerInventoryManager.currentLeftHandWeapon);
         }
     }
 }

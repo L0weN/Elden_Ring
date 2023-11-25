@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MANAGERS
-{
     public class WorldSoundFXManager : MonoBehaviour
     {
         public static WorldSoundFXManager instance;
@@ -30,4 +28,3 @@ namespace MANAGERS
 
 
     }
-}

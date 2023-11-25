@@ -595,6 +595,7 @@ GameObject:
   - component: {fileID: 5971347486962449627}
   - component: {fileID: 1259737944134971211}
   - component: {fileID: -7160396134286477067}
+  - component: {fileID: 8354577022181211151}
   - component: {fileID: 7063409400448698080}
   - component: {fileID: 7716776919633863969}
   - component: {fileID: 4200192053614221735}
@@ -665,7 +666,6 @@ MonoBehaviour:
   characterEffectsManager: {fileID: 0}
   animator: {fileID: 0}
   isGrounded: 1
-  isJumping: 0
   isPerformingAction: 0
   applyRootMotion: 0
   canRotate: 1
@@ -678,6 +678,7 @@ MonoBehaviour:
   playerStatsManager: {fileID: 0}
   playerInventoryManager: {fileID: 0}
   playerEquipmentManager: {fileID: 0}
+  playerCombatManager: {fileID: 0}
 --- !u!114 &5388677082512955822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,6 +808,19 @@ MonoBehaviour:
   leftWeaponManager: {fileID: 0}
   rightHandWeaponModel: {fileID: 0}
   leftHandWeaponModel: {fileID: 0}
+--- !u!114 &8354577022181211151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399428258803239032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f76be18d7be944390fe13732ad8b99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentWeaponBeingUsed: {fileID: 0}
 --- !u!114 &7063409400448698080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,6 +840,8 @@ MonoBehaviour:
   networkMoveAmount:
     m_InternalValue: 0
   isSprinting:
+    m_InternalValue: 0
+  isJumping:
     m_InternalValue: 0
   endurance:
     m_InternalValue: 10
@@ -908,9 +924,15 @@ MonoBehaviour:
         byte0059: 0
         byte0060: 0
         byte0061: 0
+  currentWeaponBeingUsed:
+    m_InternalValue: 0
   currentRightHandWeaponID:
     m_InternalValue: 0
   currentLeftHandWeaponID:
+    m_InternalValue: 0
+  isUsingRightHand:
+    m_InternalValue: 0
+  isUsingLeftHand:
     m_InternalValue: 0
 --- !u!114 &7716776919633863969
 MonoBehaviour:

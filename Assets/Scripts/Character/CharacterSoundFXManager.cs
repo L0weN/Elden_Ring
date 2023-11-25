@@ -1,10 +1,7 @@
-using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CHARACTER
-{
     public class CharacterSoundFXManager : MonoBehaviour
     {
         private AudioSource audioSource;
@@ -19,4 +16,3 @@ namespace CHARACTER
             audioSource.PlayOneShot(WorldSoundFXManager.instance.rollSFX);
         }
     }
-}

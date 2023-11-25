@@ -1,11 +1,8 @@
-using PLAYER;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace MANAGERS
-{
     public class WorldSaveGameManager : MonoBehaviour
     {
         public static WorldSaveGameManager instance;
@@ -313,4 +310,3 @@ namespace MANAGERS
             return worldSceneIndex;
         }
     }
-}

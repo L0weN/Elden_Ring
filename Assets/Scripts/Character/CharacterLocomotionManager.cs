@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CHARACTER
-{
     public class CharacterLocomotionManager : MonoBehaviour
     {
-        CharacterManager characterManager;
+        CharacterManager character;
         [Header("Ground Check & Jumping")]
         [SerializeField] protected float gravityForce = -40f;
         [SerializeField] LayerMask groundCheckLayerMask;
@@ -20,14 +18,14 @@ namespace CHARACTER
 
         protected virtual void Awake()
         {
-            characterManager = GetComponent<CharacterManager>();
+            character = GetComponent<CharacterManager>();
         }
 
         protected virtual void Update()
         {
             HandleGroundCheck();
 
-            if (characterManager.isGrounded)
+            if (character.isGrounded)
             {
                 if (yVelocity.y < 0)
                 {
@@ -38,31 +36,30 @@ namespace CHARACTER
             }
             else
             {
-                if (!characterManager.characterNetworkManager.isJumping.Value && !fallingVelocityHasBeenSet)
+                if (!character.characterNetworkManager.isJumping.Value && !fallingVelocityHasBeenSet)
                 {
                     fallingVelocityHasBeenSet = true;
                     yVelocity.y = fallStartYVelocity;
                 }
 
                 inAirTimer += Time.deltaTime;
-                characterManager.animator.SetFloat("inAirTimer", inAirTimer);
+                character.animator.SetFloat("inAirTimer", inAirTimer);
 
                 yVelocity.y += gravityForce * Time.deltaTime;
 
                 
             }
 
-            characterManager.characterController.Move(yVelocity * Time.deltaTime);
+            character.characterController.Move(yVelocity * Time.deltaTime);
         }
 
         protected void HandleGroundCheck()
         {
-            characterManager.isGrounded = Physics.CheckSphere(characterManager.transform.position, groundCheckSphereRadius, groundCheckLayerMask);
+            character.isGrounded = Physics.CheckSphere(character.transform.position, groundCheckSphereRadius, groundCheckLayerMask);
         }
 
         protected void OnDrawGizmosSelected()
         {
-            Gizmos.DrawSphere(characterManager.transform.position, groundCheckSphereRadius);
+            Gizmos.DrawSphere(character.transform.position, groundCheckSphereRadius);
         }
     }
-}

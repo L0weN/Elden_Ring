@@ -1,4 +1,3 @@
-using CHARACTER;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,7 +5,7 @@ using UnityEngine;
 
 public class CharacterStatsManager : MonoBehaviour
 {
-    CharacterManager characterManager;
+    CharacterManager character;
 
     [Header("Stamina Regeneration")]
     [SerializeField] float staminaRegenAmount = 2f;
@@ -16,7 +15,7 @@ public class CharacterStatsManager : MonoBehaviour
 
     protected virtual void Awake()
     {
-        characterManager = GetComponent<CharacterManager>();
+        character = GetComponent<CharacterManager>();
     }
 
     protected virtual void Start()
@@ -41,24 +40,24 @@ public class CharacterStatsManager : MonoBehaviour
 
     public virtual void RegenerateStamina()
     {
-        if (!characterManager.IsOwner) return;
+        if (!character.IsOwner) return;
 
-        if (characterManager.characterNetworkManager.isSprinting.Value) return;
+        if (character.characterNetworkManager.isSprinting.Value) return;
 
-        if (characterManager.isPerformingAction) return;
+        if (character.isPerformingAction) return;
 
         staminaRegenerationTimer += Time.deltaTime;
 
         if (staminaRegenerationTimer >= staminaRegenerationDelay)
         {
-            if (characterManager.characterNetworkManager.currentStamina.Value < characterManager.characterNetworkManager.maxStamina.Value)
+            if (character.characterNetworkManager.currentStamina.Value < character.characterNetworkManager.maxStamina.Value)
             {
                 staminaTickTimer += Time.deltaTime;
 
                 if (staminaTickTimer >= .1)
                 {
                     staminaTickTimer = 0;
-                    characterManager.characterNetworkManager.currentStamina.Value += staminaRegenAmount;
+                    character.characterNetworkManager.currentStamina.Value += staminaRegenAmount;
                 }
             }
         }

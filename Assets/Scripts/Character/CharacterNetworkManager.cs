@@ -2,11 +2,9 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-namespace CHARACTER
-{
     public class CharacterNetworkManager : NetworkBehaviour
     {
-        CharacterManager characterManager;
+        CharacterManager character;
 
         [Header("Animator")]
         public NetworkVariable<float> animatorHorizontalParameter = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -30,17 +28,17 @@ namespace CHARACTER
 
         protected virtual void Awake()
         {
-            characterManager = GetComponent<CharacterManager>();
+            character = GetComponent<CharacterManager>();
         }
 
         public void CheckHP(float oldValue, float newValue)
         {
             if (currentHealth.Value <= 0)
             {
-                StartCoroutine(characterManager.ProcessDeathEvent());
+                StartCoroutine(character.ProcessDeathEvent());
             }
 
-            if (characterManager.IsOwner)
+            if (character.IsOwner)
             {
                 if(currentHealth.Value > maxHealth.Value)
                 {
@@ -48,6 +46,8 @@ namespace CHARACTER
                 }
             }
         }
+
+        
 
         [ServerRpc]
         public void NotifyTheServerOfActionAnimationServerRpc(ulong clientID, string animationID, bool isPerformingAction, bool applyRootMotion, bool canMove, bool canRotate)
@@ -69,11 +69,39 @@ namespace CHARACTER
 
         private void PerformActionAnimationFromServer(string animationID, bool isPerformingAction, bool applyRootMotion, bool canMove, bool canRotate)
         {
-            characterManager.isPerformingAction = isPerformingAction;
-            characterManager.applyRootMotion = applyRootMotion;
-            characterManager.canMove = canMove;
-            characterManager.canRotate = canRotate;
-            characterManager.animator.CrossFade(animationID, .2f);
+            character.isPerformingAction = isPerformingAction;
+            character.applyRootMotion = applyRootMotion;
+            character.canMove = canMove;
+            character.canRotate = canRotate;
+            character.animator.CrossFade(animationID, .2f);
+        }
+
+        // Attack Action
+
+        [ServerRpc]
+        public void NotifyTheServerOfAttackActionAnimationServerRpc(ulong clientID, string animationID, bool isPerformingAction, bool applyRootMotion, bool canMove, bool canRotate)
+        {
+            if (IsServer)
+            {
+                PlayAttackActionAnimationForAllClientsClientRpc(clientID, animationID, isPerformingAction, applyRootMotion, canMove, canRotate);
+            }
+        }
+
+        [ClientRpc]
+        public void PlayAttackActionAnimationForAllClientsClientRpc(ulong clientID, string animationID, bool isPerformingAction, bool applyRootMotion, bool canMove, bool canRotate)
+        {
+            if (clientID != NetworkManager.Singleton.LocalClientId)
+            {
+                PerformAttackActionAnimationFromServer(animationID, isPerformingAction, applyRootMotion, canMove, canRotate);
+            }
+        }
+
+        private void PerformAttackActionAnimationFromServer(string animationID, bool isPerformingAction, bool applyRootMotion, bool canMove, bool canRotate)
+        {
+            character.isPerformingAction = isPerformingAction;
+            character.applyRootMotion = applyRootMotion;
+            character.canMove = canMove;
+            character.canRotate = canRotate;
+            character.animator.CrossFade(animationID, .2f);
         }
     }
-}

@@ -4,18 +4,16 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-namespace CHARACTER
-{
     public class CharacterAnimatorManager : MonoBehaviour
     {
-        CharacterManager characterManager;
+        CharacterManager character;
 
         int vertical;
         int horizontal;
 
         protected virtual void Awake()
         {
-            characterManager = GetComponent<CharacterManager>();
+            character = GetComponent<CharacterManager>();
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");
         }
@@ -29,8 +27,8 @@ namespace CHARACTER
             {
                 verticalAmount = 2;
             }
-            characterManager.animator.SetFloat(horizontal, horizontalAmount, 0.1f, Time.deltaTime);
-            characterManager.animator.SetFloat(vertical, verticalAmount, 0.1f, Time.deltaTime);
+            character.animator.SetFloat(horizontal, horizontalAmount, 0.1f, Time.deltaTime);
+            character.animator.SetFloat(vertical, verticalAmount, 0.1f, Time.deltaTime);
 
         }
 
@@ -40,13 +38,29 @@ namespace CHARACTER
            bool canRotate = false, 
            bool canMove = false)
         {
-            characterManager.applyRootMotion = applyRootMotion;
-            characterManager.animator.CrossFade(targetActionAnimation, .2f);
-            characterManager.isPerformingAction = isPerformingAction;
-            characterManager.canRotate = canRotate;
-            characterManager.canMove = canMove;
+            character.applyRootMotion = applyRootMotion;
+            character.animator.CrossFade(targetActionAnimation, .2f);
 
-            characterManager.characterNetworkManager.NotifyTheServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetActionAnimation, isPerformingAction, applyRootMotion, canMove, canRotate);
+            character.isPerformingAction = isPerformingAction;
+            character.canRotate = canRotate;
+            character.canMove = canMove;
+
+            character.characterNetworkManager.NotifyTheServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetActionAnimation, isPerformingAction, applyRootMotion, canMove, canRotate);
         }
+
+    public virtual void PlayTargetAttackActionAnimation(string targetActionAnimation,
+       bool isPerformingAction,
+       bool applyRootMotion = true,
+       bool canRotate = false,
+       bool canMove = false)
+    {
+        character.applyRootMotion = applyRootMotion;
+        character.animator.CrossFade(targetActionAnimation, .2f);
+
+        character.isPerformingAction = isPerformingAction;
+        character.canRotate = canRotate;
+        character.canMove = canMove;
+
+        character.characterNetworkManager.NotifyTheServerOfAttackActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetActionAnimation, isPerformingAction, applyRootMotion, canMove, canRotate);
     }
 }

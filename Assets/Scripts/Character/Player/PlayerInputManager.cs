@@ -1,15 +1,12 @@
-using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PLAYER
-{
     public class PlayerInputManager : MonoBehaviour
     {
         public static PlayerInputManager instance;
-        public PlayerManager playerManager;
+        public PlayerManager player;
         PlayerControls playerControls;
 
         [Header("Player Movement Input")]
@@ -27,6 +24,7 @@ namespace PLAYER
         [SerializeField] bool dodgeInput = false;
         [SerializeField] bool sprintInput = false;
         [SerializeField] bool jumpInput = false;
+        [SerializeField] bool RB_Input = false;
 
         private void Awake()
         {
@@ -92,6 +90,8 @@ namespace PLAYER
                 playerControls.PlayerActions.Sprint.performed += ctx => sprintInput = true;
                 // Releasing the sprint button will trigger the sprint action
                 playerControls.PlayerActions.Sprint.canceled += ctx => sprintInput = false;
+                // Pressing the RB button will trigger the RB action
+                playerControls.PlayerActions.RB.performed += ctx => RB_Input = true;
             }
 
             playerControls.Enable();
@@ -128,8 +128,9 @@ namespace PLAYER
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
-            HandleSprintInput();
             HandleJumpInput();
+            HandleSprintInput();
+            HandleRBInput();
         }
         // Movement
         private void HandlePlayerMovementInput()
@@ -147,8 +148,8 @@ namespace PLAYER
             {
                 moveAmount = 1f;
             }
-            if (playerManager == null) return;
-            playerManager.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, playerManager.playerNetworkManager.isSprinting.Value);
+            if (player == null) return;
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
         }
 
         private void HandleCameraMovementInput()
@@ -163,7 +164,7 @@ namespace PLAYER
             if (dodgeInput)
             {
                 dodgeInput = false;
-                playerManager.playerLocomotionManager.AttemptToPerformDodge();
+                player.playerLocomotionManager.AttemptToPerformDodge();
             }
         }
 
@@ -171,11 +172,11 @@ namespace PLAYER
         {
             if (sprintInput)
             {
-                playerManager.playerLocomotionManager.HandleSprinting();
+                player.playerLocomotionManager.HandleSprinting();
             }
             else
             {
-                playerManager.playerNetworkManager.isSprinting.Value = false;
+                player.playerNetworkManager.isSprinting.Value = false;
             }
         }
 
@@ -184,8 +185,17 @@ namespace PLAYER
             if (jumpInput)
             {
                 jumpInput = false;
-                playerManager.playerLocomotionManager.AttemptToPerformJump();
+                player.playerLocomotionManager.AttemptToPerformJump();
+            }
+        }
+
+        private void HandleRBInput()
+        {
+            if (RB_Input)
+            {
+                RB_Input = false;
+                player.playerNetworkManager.SetCharacterActionHand(true);
+                player.playerCombatManager.PerformWeaponBasedAction(player.playerInventoryManager.currentRightHandWeapon.oh_RB_Action, player.playerInventoryManager.currentRightHandWeapon);
             }
         }
     }
-}

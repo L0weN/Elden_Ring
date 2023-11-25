@@ -1,21 +1,20 @@
-using CHARACTER;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ResetIsJumping : StateMachineBehaviour
 {
-    CharacterManager characterManager;
+    CharacterManager character;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (characterManager == null)
+        if (character == null)
         {
-            characterManager = animator.GetComponent<CharacterManager>();
+            character = animator.GetComponent<CharacterManager>();
         }
-        if (characterManager.IsOwner)
+        if (character.IsOwner)
         {
-            characterManager.characterNetworkManager.isJumping.Value = false;
+            character.characterNetworkManager.isJumping.Value = false;
         }
         
     }

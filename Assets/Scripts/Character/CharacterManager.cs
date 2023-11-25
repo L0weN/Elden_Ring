@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-namespace CHARACTER
-{
     public class CharacterManager : NetworkBehaviour
     {
         [Header("Status")]
@@ -99,4 +97,3 @@ namespace CHARACTER
             }
         }
     }
-}

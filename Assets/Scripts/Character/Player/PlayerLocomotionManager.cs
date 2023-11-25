@@ -1,10 +1,7 @@
-using CHARACTER;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PLAYER
-{
     public class PlayerLocomotionManager : CharacterLocomotionManager
     {
         PlayerManager playerManager;
@@ -236,4 +233,3 @@ namespace PLAYER
             yVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravityForce);
         }
     }
-}

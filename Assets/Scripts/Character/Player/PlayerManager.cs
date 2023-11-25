@@ -1,12 +1,8 @@
-using CHARACTER;
-using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PLAYER
-{
     public class PlayerManager : CharacterManager
     {
         [Header("DEBUG MENU")]
@@ -19,6 +15,7 @@ namespace PLAYER
         [HideInInspector] public PlayerStatsManager playerStatsManager;
         [HideInInspector] public PlayerInventoryManager playerInventoryManager;
         [HideInInspector] public PlayerEquipmentManager playerEquipmentManager;
+        [HideInInspector] public PlayerCombatManager playerCombatManager;
 
         protected override void Awake()
         {
@@ -29,6 +26,7 @@ namespace PLAYER
             playerStatsManager = GetComponent<PlayerStatsManager>();
             playerInventoryManager = GetComponent<PlayerInventoryManager>();
             playerEquipmentManager = GetComponent<PlayerEquipmentManager>();
+            playerCombatManager = GetComponent<PlayerCombatManager>();
         }
 
         protected override void Update()
@@ -58,7 +56,7 @@ namespace PLAYER
             if (IsOwner)
             {
                 PlayerCamera.instance.player = this;
-                PlayerInputManager.instance.playerManager = this;
+                PlayerInputManager.instance.player = this;
                 WorldSaveGameManager.instance.playerManager = this;
 
                 playerNetworkManager.vitality.OnValueChanged += playerNetworkManager.SetNewMaxHealthValue;
@@ -74,6 +72,7 @@ namespace PLAYER
 
             playerNetworkManager.currentRightHandWeaponID.OnValueChanged += playerNetworkManager.OnCurrentRightHandWeaponIDChange;
             playerNetworkManager.currentLeftHandWeaponID.OnValueChanged += playerNetworkManager.OnCurrentLeftHandWeaponIDChange;
+            playerNetworkManager.currentWeaponBeingUsed.OnValueChanged += playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
 
             if (IsOwner && !IsServer)
             {
@@ -173,4 +172,3 @@ namespace PLAYER
         }
 
     }
-}

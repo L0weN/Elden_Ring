@@ -1,27 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CHARACTER;
-using PLAYER;
 
 public class PlayerAnimatorManager : CharacterAnimatorManager
 {
-    PlayerManager playerManager;
+    PlayerManager player;
 
     protected override void Awake()
     {
         base.Awake();
 
-        playerManager = GetComponent<PlayerManager>();
+        player = GetComponent<PlayerManager>();
     }
     
     private void OnAnimatorMove()
     {
-        if (playerManager.applyRootMotion)
+        if (player.applyRootMotion)
         {
-            Vector3 velocity = playerManager.animator.deltaPosition;
-            playerManager.characterController.Move(velocity);
-            playerManager.transform.rotation *= playerManager.animator.deltaRotation;
+            Vector3 velocity = player.animator.deltaPosition;
+            player.characterController.Move(velocity);
+            player.transform.rotation *= player.animator.deltaRotation;
         }
     }
 }
